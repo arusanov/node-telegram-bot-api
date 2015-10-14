@@ -174,13 +174,13 @@ TelegramBot.prototype.setWebHook = function (url, cert) {
  * @see https://core.telegram.org/bots/api#getupdates
  */
 TelegramBot.prototype.getUpdates = function (timeout, limit, offset) {
-  var form = {
+  var json = {
     offset: offset,
     limit: limit,
     timeout: timeout
   };
 
-  return this._request('getUpdates', {form: form});
+  return this._request('getUpdates', {json: json});
 };
 
 /**
@@ -192,10 +192,10 @@ TelegramBot.prototype.getUpdates = function (timeout, limit, offset) {
  * @see https://core.telegram.org/bots/api#sendmessage
  */
 TelegramBot.prototype.sendMessage = function (chatId, text, options) {
-  var form = options || {};
-  form.chat_id = chatId;
-  form.text = text;
-  return this._request('sendMessage', {form: form});
+  var json = options || {};
+  json.chat_id = chatId;
+  json.text = text;
+  return this._request('sendMessage', {json: json});
 };
 
 /**
@@ -207,12 +207,12 @@ TelegramBot.prototype.sendMessage = function (chatId, text, options) {
  * @return {Promise}
  */
 TelegramBot.prototype.forwardMessage = function (chatId, fromChatId, messageId) {
-  var form = {
+  var json = {
     chat_id: chatId,
     from_chat_id: fromChatId,
     message_id: messageId
   };
-  return this._request('forwardMessage', {form: form});
+  return this._request('forwardMessage', {json: json});
 };
 
 TelegramBot.prototype._formatSendData = function (type, data) {
@@ -383,7 +383,7 @@ TelegramBot.prototype.sendChatAction = function (chatId, action) {
     chat_id: chatId,
     action: action
   };
-  return this._request('sendChatAction', {form: form});
+  return this._request('sendChatAction', {json: form});
 };
 
 /**
@@ -397,12 +397,12 @@ TelegramBot.prototype.sendChatAction = function (chatId, action) {
  * @see https://core.telegram.org/bots/api#getuserprofilephotos
  */
 TelegramBot.prototype.getUserProfilePhotos = function (userId, offset, limit) {
-  var form = {
+  var json = {
     user_id: userId,
     offset: offset,
     limit: limit
   };
-  return this._request('getUserProfilePhotos', {form: form});
+  return this._request('getUserProfilePhotos', {json: json});
 };
 
 /**
@@ -417,11 +417,11 @@ TelegramBot.prototype.getUserProfilePhotos = function (userId, offset, limit) {
  * @see https://core.telegram.org/bots/api#sendlocation
  */
 TelegramBot.prototype.sendLocation = function (chatId, latitude, longitude, options) {
-  var form = options || {};
-  form.chat_id = chatId;
-  form.latitude = latitude;
-  form.longitude = longitude;
-  return this._request('sendLocation', {form: form});
+  var json = options || {};
+  json.chat_id = chatId;
+  json.latitude = latitude;
+  json.longitude = longitude;
+  return this._request('sendLocation', {json: json});
 };
 
 /**
@@ -434,8 +434,8 @@ TelegramBot.prototype.sendLocation = function (chatId, latitude, longitude, opti
  * @see https://core.telegram.org/bots/api#getfile
  */
 TelegramBot.prototype.getFile = function(fileId) {
-  var form = {file_id: fileId};
-  return this._request('getFile', {form: form});
+  var json = {file_id: fileId};
+  return this._request('getFile', {json: json});
 };
 
 /**
