@@ -56,7 +56,7 @@ var TelegramBot = function (token, options) {
 
 util.inherits(TelegramBot, EventEmitter);
 
-TelegramBot.prototype.initPolling = function() {
+TelegramBot.prototype.initPolling = function () {
   if (this._polling) {
     this._polling.abort = true;
     this._polling.lastRequest.cancel('Polling restart');
@@ -101,13 +101,13 @@ TelegramBot.prototype._request = function (path, options) {
   return requestPromise(options)
     .then(function (resp) {
       if (resp[0].statusCode !== 200) {
-        throw new Error(resp[0].statusCode+' '+resp[0].body);
+        throw new Error(resp[0].statusCode + ' ' + resp[0].body);
       }
       var data = JSON.parse(resp[0].body);
       if (data.ok) {
         return data.result;
       } else {
-        throw new Error(data.error_code+' '+data.description);
+        throw new Error(data.error_code + ' ' + data.description);
       }
     });
 };
@@ -119,7 +119,7 @@ TelegramBot.prototype._request = function (path, options) {
  * @private
  * @see https://core.telegram.org/bots/api#making-requests
  */
-TelegramBot.prototype._buildURL = function(path) {
+TelegramBot.prototype._buildURL = function (path) {
   return URL.format({
     protocol: 'https',
     host: 'api.telegram.org',
@@ -219,7 +219,7 @@ TelegramBot.prototype._formatSendData = function (type, data) {
   var formData;
   var fileName;
   var fileId;
-  if (data instanceof stream.Stream) {
+  if (data instanceof stream.Stream || data instanceof Buffer) {
     fileName = URL.parse(path.basename(data.path)).pathname;
     formData = {};
     formData[type] = {
@@ -433,7 +433,7 @@ TelegramBot.prototype.sendLocation = function (chatId, latitude, longitude, opti
  * @return {Promise}
  * @see https://core.telegram.org/bots/api#getfile
  */
-TelegramBot.prototype.getFile = function(fileId) {
+TelegramBot.prototype.getFile = function (fileId) {
   var json = {file_id: fileId};
   return this._request('getFile', {json: json});
 };
@@ -449,7 +449,7 @@ TelegramBot.prototype.getFile = function(fileId) {
  * @return {Promise} promise Promise which will have *fileURI* in resolve callback
  * @see https://core.telegram.org/bots/api#getfile
  */
-TelegramBot.prototype.getFileLink = function(fileId) {
+TelegramBot.prototype.getFileLink = function (fileId) {
 
   var self = this;
   return self.getFile(fileId).then(function (resp) {
@@ -470,7 +470,7 @@ TelegramBot.prototype.getFileLink = function(fileId) {
  * @param  {String} downloadDir Absolute path to the folder in which file will be saved
  * @return {Promise} promise Promise, which will have *filePath* of downloaded file in resolve callback
  */
-TelegramBot.prototype.downloadFile = function(fileId, downloadDir) {
+TelegramBot.prototype.downloadFile = function (fileId, downloadDir) {
 
   return this.getFileLink(fileId).then(function (fileURI) {
     var fileName = fileURI.slice(fileURI.lastIndexOf('/') + 1);
@@ -480,7 +480,7 @@ TelegramBot.prototype.downloadFile = function(fileId, downloadDir) {
       request({uri: fileURI})
         .pipe(fs.createWriteStream(filePath))
         .on('error', reject)
-        .on('close', function() {
+        .on('close', function () {
           resolve(filePath);
         });
     });
